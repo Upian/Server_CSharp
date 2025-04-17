@@ -4,11 +4,11 @@ using System.Net.Sockets;
 
 namespace ServerLib.TCP
 {
-	internal class Socket
+	internal class SocketTemp
 	{
 		private System.Net.Sockets.Socket _socket;
 
-		public Socket()
+		public SocketTemp()
 		{
 			_socket = new System.Net.Sockets.Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
 		}
@@ -18,9 +18,21 @@ namespace ServerLib.TCP
 			_socket.Bind(new IPEndPoint(IPAddress.Any, port));
 		}
 
-		public void Listen(ushort backlog = 100)
+		public void Listen(ushort backlog)
 		{
 			_socket.Listen(backlog);
 		}
+
+		public void Listen()
+		{
+			_socket.Listen();
+		}
+
+		public void AcceptAsync()
+		{
+
+		}
+
+
 	}
 }

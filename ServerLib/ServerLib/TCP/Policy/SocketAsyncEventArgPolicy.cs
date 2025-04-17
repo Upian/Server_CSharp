@@ -24,8 +24,12 @@ namespace ServerLib.TCP.Policy
 
 		public bool Return(SocketAsyncEventArgs obj)
 		{
-			// 필요하면 반환 전 초기화 가능
-			return true; // 풀에 다시 넣을지 여부
+			//반환 전 초기화
+			obj.SetBuffer(obj.Buffer, 0, _bufferSize);
+			obj.AcceptSocket = null;
+			obj.UserToken = null;
+			
+			return true; //풀에 다시 넣을지 여부
 		}
 	}
 }
