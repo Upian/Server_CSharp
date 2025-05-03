@@ -13,6 +13,10 @@ namespace ServerTest
 		{
 			Console.WriteLine("Start");
 			ServerLib.TCP.Server server = new ServerLib.TCP.Server();
+			server.AddAcceptor(8888);
+			server.Start();
+
+			Console.ReadLine();
 		}
 	}
 }

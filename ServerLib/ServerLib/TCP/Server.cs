@@ -10,21 +10,24 @@ namespace ServerLib.TCP
 	{
 		private Socket? _socket = null;
 		private DefaultObjectPool<SocketAsyncEventArgs>? _readEventPool = null;
+		private Acceptor _acceptor = new Acceptor();
+
 		public Server() 
 		{
-			//			_socket = new SocketTemp();
-			_socket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
 			Policy.SocketAsyncEventArgPolicy policy = new Policy.SocketAsyncEventArgPolicy(1024, HandleIOCompleted);
 			_readEventPool = new DefaultObjectPool<SocketAsyncEventArgs>(policy);
 		}
 
-		public void Start(ushort port)
+		public void AddAcceptor(ushort port)
 		{
-			_socket.Bind(new IPEndPoint(IPAddress.Any, port));
-			_socket.Listen();
+			_acceptor.Initialize(port);
+		}
+		public void Start()
+		{
+			_acceptor.Start();
 			Console.WriteLine("Start listen");
 			
-			this.StartAccept();
+//			this.StartAccept();
 		}
 		
 		private void StartAccept()
