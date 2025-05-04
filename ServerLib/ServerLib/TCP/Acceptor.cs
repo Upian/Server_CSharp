@@ -12,10 +12,10 @@ namespace ServerLib.TCP
 	internal class Acceptor
 	{
 		private Socket _socket;
-		private readonly SessionManager _sessionManager;
+		private readonly SessionManager<Session> _sessionManager;
 		SocketAsyncEventArgs _acceptEventArg;
 
-		public Acceptor(SessionManager sessionManager) 
+		public Acceptor(SessionManager<Session> sessionManager) 
 		{
 			_sessionManager = sessionManager;
 		}

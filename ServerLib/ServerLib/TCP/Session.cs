@@ -4,18 +4,22 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Net.Sockets;
+using System.Runtime.CompilerServices;
 
 namespace ServerLib.TCP
 {
+	public abstract class BaseSession
+	{
+		protected abstract void HandleSend(SocketAsyncEventArgs e);
+		protected abstract void HandleRecieve(SocketAsyncEventArgs e);
+	}
+
 	//연결된 클라이언트 객체
-	internal class Session
+	//상속하여 사용
+	public class Session : BaseSession
 	{
 		private SocketAsyncEventArgs _socketAsyncEventArg;
-		public SocketAsyncEventArgs SocketAsyncEventArg
-		{
-			get => _socketAsyncEventArg;
-			set => _socketAsyncEventArg = value;
-		}
+		
 		public Session() 
 		{
 			_socketAsyncEventArg = new SocketAsyncEventArgs();
@@ -58,13 +62,11 @@ namespace ServerLib.TCP
 				this.HandleRecieve(_socketAsyncEventArg);
 		}
 
-		protected virtual void HandleSend(SocketAsyncEventArgs e)
+		protected override void HandleSend(SocketAsyncEventArgs e)
 		{
-
 		}
-		protected virtual void HandleRecieve(SocketAsyncEventArgs e)
-		{
-
+		protected override void HandleRecieve(SocketAsyncEventArgs e)
+		{ 
 		}
 	}
 }

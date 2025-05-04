@@ -9,13 +9,14 @@ using ServerLib.TCP.Policy;
 
 namespace ServerLib.TCP
 {
-	internal class SessionManager
+	internal class SessionManager<T_Session>
+		where T_Session : Session, new()
 	{
-		private DefaultObjectPool<Session> _sessionPool;
+		private DefaultObjectPool<T_Session> _sessionPool;
 		public SessionManager() 
 		{
-			Policy.SessionPoolPolicy policy = new Policy.SessionPoolPolicy();
-			_sessionPool = new DefaultObjectPool<Session>(policy);
+			Policy.SessionPoolPolicy<T_Session> policy = new Policy.SessionPoolPolicy<T_Session>();
+			_sessionPool = new DefaultObjectPool<T_Session>(policy);
 		}
 
 		public Session CreateSession()
@@ -24,7 +25,8 @@ namespace ServerLib.TCP
 			return session;
 		}
 
-		public void ReleaseSession(Session session)
+		
+		public void ReleaseSession(T_Session session)
 		{
 			_sessionPool.Return(session);
 		}

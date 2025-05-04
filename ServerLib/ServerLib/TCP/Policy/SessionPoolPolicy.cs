@@ -8,20 +8,21 @@ using Microsoft.Extensions.ObjectPool;
 
 namespace ServerLib.TCP.Policy
 {
-	internal class SessionPoolPolicy<T_Session> : IPooledObjectPolicy<Session>
+	internal class SessionPoolPolicy<T_Session> : IPooledObjectPolicy<T_Session>
+		where T_Session : Session, new()
 	{
 		public SessionPoolPolicy()
 		{
 
 		}
 
-		public Session Create()
+		public T_Session Create()
 		{
-			var e = new Session();
+			var e = new T_Session();
 			return e;
 		}
 
-		public bool Return(Session obj)
+		public bool Return(T_Session obj)
 		{
 			//반환 전 초기화
 			obj.Reset();

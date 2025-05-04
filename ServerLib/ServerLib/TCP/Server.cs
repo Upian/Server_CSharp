@@ -6,13 +6,14 @@ using Microsoft.Extensions.ObjectPool;
 
 namespace ServerLib.TCP
 {
-	public class Server
+	public class Server<T_Session>
+		where T_Session : Session, new()
 	{
-		private SessionManager _sessionManager;
+		private SessionManager<T_Session> _sessionManager;
 		private Acceptor _acceptor;
 		public Server() 
 		{
-			_sessionManager = new SessionManager();
+			_sessionManager = new SessionManager<T_Session>();
 			_acceptor = new Acceptor(_sessionManager);
 		}
 
