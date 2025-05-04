@@ -11,20 +11,18 @@ namespace ServerLib.TCP
 {
 	internal class Acceptor
 	{
-		private Socket? _socket = null;
-		private DefaultObjectPool<SocketAsyncEventArgs>? _readEventPool = null;
+		private Socket _socket;
+		private readonly SessionManager _sessionManager;
 		SocketAsyncEventArgs _acceptEventArg;
 
-		public Acceptor() 
+		public Acceptor(SessionManager sessionManager) 
 		{
+			_sessionManager = sessionManager;
 		}
 
 		public void Initialize(ushort port)
 		{
 			_socket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
-			Policy.SocketAsyncEventArgPolicy policy = new Policy.SocketAsyncEventArgPolicy(1024, HandleIOCompleted);
-			_readEventPool = new DefaultObjectPool<SocketAsyncEventArgs>(policy);
-
 			_socket.Bind(new IPEndPoint(IPAddress.Any, port));
 			_socket.Listen();
 		}
@@ -63,15 +61,14 @@ namespace ServerLib.TCP
 			}
 
 			Socket clientSocket = e.AcceptSocket;
-			var readEvent = _readEventPool.Get();
-			if (null == readEvent)
+			var session = _sessionManager.CreateSession();
+			if (null == session)
 			{
 				Console.WriteLine("ERROR");
 				return;
 			}
-			readEvent.UserToken = clientSocket; //나중에 ClientSession으로
-			readEvent.AcceptSocket = clientSocket;
-			
+			session.Initialize(clientSocket);
+
 			StartAccept();
 		}
 
