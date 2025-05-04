@@ -36,11 +36,35 @@ namespace ServerLib.TCP
 		public void Initialize(Socket socket)
 		{
 			_socketAsyncEventArg.AcceptSocket = socket;
+			_socketAsyncEventArg.UserToken = socket;
 		}
 		private void HandleIOCompleted(object sender, SocketAsyncEventArgs e)
 		{
-
+			switch (e.LastOperation)
+			{
+				case SocketAsyncOperation.Receive:
+					this.HandleRecieve(e);
+					break;
+				case SocketAsyncOperation.Send:
+					this.HandleSend(e);
+					break;
+			}
 		}
 
+		public void Start()
+		{
+			bool result = _socketAsyncEventArg.AcceptSocket.ReceiveAsync(_socketAsyncEventArg);
+			if (false == result)
+				this.HandleRecieve(_socketAsyncEventArg);
+		}
+
+		protected virtual void HandleSend(SocketAsyncEventArgs e)
+		{
+
+		}
+		protected virtual void HandleRecieve(SocketAsyncEventArgs e)
+		{
+
+		}
 	}
 }

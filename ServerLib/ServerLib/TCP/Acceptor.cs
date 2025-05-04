@@ -68,6 +68,7 @@ namespace ServerLib.TCP
 				return;
 			}
 			session.Initialize(clientSocket);
+			session.Start();
 
 			StartAccept();
 		}

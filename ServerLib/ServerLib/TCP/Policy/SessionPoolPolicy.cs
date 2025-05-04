@@ -8,7 +8,7 @@ using Microsoft.Extensions.ObjectPool;
 
 namespace ServerLib.TCP.Policy
 {
-	internal class SessionPoolPolicy : IPooledObjectPolicy<Session>
+	internal class SessionPoolPolicy<T_Session> : IPooledObjectPolicy<Session>
 	{
 		public SessionPoolPolicy()
 		{
