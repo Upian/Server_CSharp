@@ -50,6 +50,13 @@ namespace ServerLib.TCP
 			switch (e.LastOperation)
 			{
 				case SocketAsyncOperation.Receive:
+					if(0 == e.BytesTransferred ||
+						SocketError.Success != e.SocketError)
+					{
+						Console.WriteLine("Client disconnect");
+						//처리 필요
+						break;
+					}
 					this.HandleRecieve(e);
 					break;
 				case SocketAsyncOperation.Send:

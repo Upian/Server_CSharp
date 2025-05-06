@@ -6,7 +6,7 @@ using Microsoft.Extensions.ObjectPool;
 
 namespace ServerLib.TCP
 {
-	public class Server
+	public class Server //나중에 abstract로 변경
 	{
 		private Acceptor _acceptor;
 		public Server() 
