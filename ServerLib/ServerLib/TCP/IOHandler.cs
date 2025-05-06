@@ -5,22 +5,25 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Net.Sockets;
 using System.Runtime.CompilerServices;
+using Microsoft.Extensions.ObjectPool;
+using ServerLib.TCP.Policy;
 
 namespace ServerLib.TCP
 {
-	public abstract class BaseSession
+	//연결된 IO 관리
+	public class IOHandler
 	{
-		protected abstract void HandleSend(SocketAsyncEventArgs e);
-		protected abstract void HandleRecieve(SocketAsyncEventArgs e);
-	}
+		//static
+		private static readonly DefaultObjectPool<IOHandler> _IOHandlerPool 
+			= new DefaultObjectPool<IOHandler>(new IOHandlerPoolPolicy());
 
-	//연결된 클라이언트 객체
-	//상속하여 사용
-	public class Session : BaseSession
-	{
+		public static IOHandler CreateIOHandler() => _IOHandlerPool.Get();
+		public static void ReleaseIOHandler(IOHandler obj) => _IOHandlerPool.Return(obj);
+		
+		///////
 		private SocketAsyncEventArgs _socketAsyncEventArg;
 		
-		public Session() 
+		public IOHandler() 
 		{
 			_socketAsyncEventArg = new SocketAsyncEventArgs();
 			_socketAsyncEventArg.SetBuffer(new byte[Common.BufferSize], 0, Common.BufferSize);// 버퍼 설정
@@ -62,11 +65,13 @@ namespace ServerLib.TCP
 				this.HandleRecieve(_socketAsyncEventArg);
 		}
 
-		protected override void HandleSend(SocketAsyncEventArgs e)
+		protected void HandleSend(SocketAsyncEventArgs e)
 		{
+
 		}
-		protected override void HandleRecieve(SocketAsyncEventArgs e)
-		{ 
+		protected void HandleRecieve(SocketAsyncEventArgs e)
+		{
+
 		}
 	}
 }

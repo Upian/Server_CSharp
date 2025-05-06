@@ -6,15 +6,12 @@ using Microsoft.Extensions.ObjectPool;
 
 namespace ServerLib.TCP
 {
-	public class Server<T_Session>
-		where T_Session : Session, new()
+	public class Server
 	{
-		private SessionManager<T_Session> _sessionManager;
 		private Acceptor _acceptor;
 		public Server() 
 		{
-			_sessionManager = new SessionManager<T_Session>();
-			_acceptor = new Acceptor(_sessionManager);
+			_acceptor = new Acceptor();
 		}
 
 		public void AddAcceptor(ushort port)

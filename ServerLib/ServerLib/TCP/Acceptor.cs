@@ -12,12 +12,11 @@ namespace ServerLib.TCP
 	internal class Acceptor
 	{
 		private Socket _socket;
-		private readonly SessionManager<Session> _sessionManager;
 		SocketAsyncEventArgs _acceptEventArg;
 
-		public Acceptor(SessionManager<Session> sessionManager) 
+		public Acceptor() 
 		{
-			_sessionManager = sessionManager;
+
 		}
 
 		public void Initialize(ushort port)
@@ -61,14 +60,14 @@ namespace ServerLib.TCP
 			}
 
 			Socket clientSocket = e.AcceptSocket;
-			var session = _sessionManager.CreateSession();
-			if (null == session)
+			var ioHandler = IOHandler.CreateIOHandler();
+			if (null == ioHandler)
 			{
 				Console.WriteLine("ERROR");
 				return;
 			}
-			session.Initialize(clientSocket);
-			session.Start();
+			ioHandler.Initialize(clientSocket);
+			ioHandler.Start();
 
 			StartAccept();
 		}
